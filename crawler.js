@@ -1,17 +1,14 @@
-var arr = [];
-var parse = function(selector, callback) {
-  $(selector).children().each(callback);
-};
-var log = function(ele, cls) {
-  console.log($(ele).find(cls).text())
-};
-var append = function(content) {
-  $('.footer').append(content.join(','));
-};
-var push = function(content) {
-  arr.push(content)
-};
+const request = require('request'),
+      cheerio = require('cheerio'),
+      https = require('https');
 
-parse('.user-item', (i, e) => {
-  push($(e).find('.position').text());
+const parse = ($, selector, cb) =>
+        $(selector).children().each(cb);
+
+const url = 'https://news.ycombinator.com/';
+
+request(url, (err, res, body) => {
+  const $ = cheerio.load(body);
+  parse($, '#hnmain', (i, el) =>
+        console.log($(el).text()));
 });
